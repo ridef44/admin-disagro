@@ -27,7 +27,7 @@ function renderProducto(req, res) {
 
 function register(req, res) {
   let correo = req.session.correo;
-  if (!req.session.loggedIn || correo !== process.env.MAIL_ADMIN) {
+  if (!req.session.loggedIn ) {
     return res.redirect('/');
   }
 

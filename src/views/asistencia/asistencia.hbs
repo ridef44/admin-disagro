@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistencias</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto py-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Lista de Asistencias</h1>
+            <div class="relative w-full max-w-xs">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Buscar..." 
+                    class="w-full pl-10 pr-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                />
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <i data-feather="search"></i>
+                </div>
+            </div>
+        </div>
+        <table class="min-w-full bg-white border border-gray-300 rounded-xl overflow-hidden shadow-sm text-gray-600">
+            <thead class="bg-zinc-700 font-bold">
+                <tr>
+                    <th class="py-3 px-4 border-b border-gray-300 text-left text-md font-semibold text-white">Nombre</th>
+                    <th class="py-3 px-4 border-b border-gray-300 text-left text-md font-semibold text-white">Correo</th>
+                    <th class="py-3 px-4 border-b border-gray-300 text-left text-md font-semibold text-white">Fecha y Hora</th>
+                    <th class="py-3 px-4 border-b border-gray-300 text-left text-md font-semibold text-white">Monto Final</th>
+                    <th class="py-3 px-4 border-b border-gray-300 text-left text-md font-semibold text-white">Productos y Servicios</th>
+                </tr>
+            </thead>
+            <tbody id="asistenciasTable">
+                {{#each usuarios}}
+                    {{#each asistencias}}
+                        <tr class="even:bg-gray-50 odd:bg-white">
+                            {{#if @first}}
+                                <td rowspan="{{../asistencias.length}}" class="py-3 px-4 border-b border-gray-300 align-top font-bold">{{../nombre}} {{../apellidos}}</td>
+                                <td rowspan="{{../asistencias.length}}" class="py-3 px-4 border-b border-gray-300 align-top">{{../correo}}</td>
+                            {{/if}}
+                            <td class="py-3 px-4 border-b border-gray-300">{{this.fechaHora}}</td>
+                            <td class="py-3 px-4 border-b border-gray-300"> Q. {{this.montoFinal}}</td>
+                            <td class="py-3 px-4 border-b border-gray-300 text-sm">
+                                <ul class="list-disc list-outside">
+                                    {{#each this.productos}}
+                                        <li > 
+                                            <span class="font-bold uppercase">
+                                                  {{this.type}}:
+                                            </span>
+                                           {{this.name}} - Q.{{this.price}}</li>
+                                    {{/each}}
+                                </ul>
+                            </td>
+                        </tr>
+                    {{/each}}
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        feather.replace();
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchQuery = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#asistenciasTable tr');
+
+            rows.forEach(row => {
+                const nombre = row.querySelector('td:nth-child(1)').innerText.toLowerCase();
+                const correo = row.querySelector('td:nth-child(2)').innerText.toLowerCase();
+
+                if (nombre.includes(searchQuery) || correo.includes(searchQuery)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
